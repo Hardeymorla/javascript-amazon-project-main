@@ -6,9 +6,18 @@ import { getDeliveryOptions } from "../data/deliveryOptions.js";
 
 console.log("Script is running");
 
-function renderOrders() {
-    let ordersHTML = "";
+export function findMatchingOrders(saveOrderId) {
+    const myOrders = placeOrders();
+    let matchingOrder = myOrders.find((order) =>
+        order.orderId === saveOrderId
+    )
+    return matchingOrder
+};
 
+export function placeOrders() {
+    const orders = [];
+
+    
     let cartQuantity = 0;
     cart.forEach((cartItem) => {
         
@@ -39,63 +48,20 @@ function renderOrders() {
         const estTax = totalBeforeTax * 0.1;
         const totalOrders = totalBeforeTax + estTax;
 
-        ordersHTML += `
-            <div class="order-container">
-            
-                <div class="order-header">
-                    <div class="order-header-left-section">
-                    <div class="order-date">
-                        <div class="order-header-label">Order Placed:</div>
-                        <div>${currenDate}</div>
-                    </div>
-                    <div class="order-total">
-                        <div class="order-header-label">Total:</div>
-                        <div>$${(totalOrders / 100).toFixed(2)}</div>
-                    </div>
-                    </div>
+        
 
-                    <div class="order-header-right-section">
-                    <div class="order-header-label">Order ID:</div>
-                    <div>${matchingItem.id}</div>
-                    </div>
-                </div>
-
-                <div class="order-details-grid">
-                    <div class="product-image-container">
-                    <img src="${matchingItem.image}">
-                    </div>
-
-                    <div class="product-details">
-                    <div class="product-name">
-                        ${matchingItem.name}
-                    </div>
-                    <div class="product-delivery-date">
-                        Arriving on: ${dateFormat}
-                    </div>
-                    <div class="product-quantity">
-                        Quantity: ${cartItem.quantity}
-                    </div>
-                    <button class="buy-again-button button-primary">
-                        <img class="buy-again-icon" src="images/icons/buy-again.png">
-                        <span class="buy-again-message">Buy it again</span>
-                    </button>
-                    </div>
-
-                    <div class="product-actions">
-                    <a href="tracking.html">
-                        <button class="track-package-button button-secondary">
-                        Track package
-                        </button>
-                    </a>
-                    </div>
-
-                </div>
-            </div>`;
- 
-    });
+        orders.push({
+            dateOrdered: currenDate,
+            deliveryDate: dateFormat,
+            totalOrders: (totalOrders / 100).toFixed(2),
+            orderId: matchingItem.id,
+            orderImage: matchingItem.image,
+            orderName: matchingItem.name,
+            ordersQuantity: cartItem.quantity
     
-    document.querySelector(".js-orders-grid").innerHTML = ordersHTML;
-    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
-
+        })
+     
+    });
+    return orders;
+    
 };
-renderOrders();

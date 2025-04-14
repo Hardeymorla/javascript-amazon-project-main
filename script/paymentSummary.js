@@ -1,6 +1,7 @@
 import { cart } from "../data/cart.js";
 import { getDeliveryOptions } from "../data/deliveryOptions.js";
 import { renderproducts } from "../data/products.js";
+import { placeOrders } from "./orders.js";
 
 
 export function renderPaymentSummary() {
@@ -62,14 +63,13 @@ export function renderPaymentSummary() {
     document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML;
 
     
-    document.querySelectorAll(".js-button-primary").forEach((jsButton) => {
-        console.log(jsButton);
-        jsButton.addEventListener("click", () => {
+    document.querySelector(".js-button-primary")
+        .addEventListener("click", (e) => {
+            e.preventDefault();
+            placeOrders()
             console.log("clicked");
-            window.location.href =
-                "http://127.0.0.1:5501/Amazon%20Project/javascript-amazon-project/orders.html";
-        })
-    });
+            window.location.href = 'orders.html';
+    })
 
     document.querySelector(".js-checkout-header a")
         .textContent = `${cartQuantity} items`;
